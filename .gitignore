@@ -1,0 +1,8 @@
+# Default ignored files
+/shelf/
+/.idea/workspace.xml
+
+/.idea
+/out
+MyApp_Euro2020.iml
+.DS_Store
