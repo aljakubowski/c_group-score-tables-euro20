@@ -1,79 +1,54 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class Group<T extends Team> {
 
-    private String name;
-    private ArrayList<T> leagueTeams = new ArrayList<>();
+    private final String name;
+    private final List<T> groupTeams;
     int matchCount = 0;
 
-    public Group(String name, T team1, T team2, T team3, T team4 ) {
-        this.name = name;
-        leagueTeams.add(team1);
-        leagueTeams.add(team2);
-        leagueTeams.add(team3);
-        leagueTeams.add(team4);
-    }
-
-    public Group(String name, T team1, T team2, T team3, T team4, T team5, T team6) {
-        this.name = name;
-        leagueTeams.add(team1);
-        leagueTeams.add(team2);
-        leagueTeams.add(team3);
-        leagueTeams.add(team4);
-        leagueTeams.add(team5);
-        leagueTeams.add(team6);
+    public Group(Map<String, List<T>> groupTeams) {
+        Map.Entry<String, List<T>> entry = groupTeams.entrySet().iterator().next();
+        this.name = entry.getKey();
+        this.groupTeams = entry.getValue();
     }
 
     public String getName() {
-        return name;
+        return "Group " + name;
     }
 
-    public ArrayList<T> getLeagueTeams() {
-        return leagueTeams;
-    }
-
-    public Team getThird(){
-        return this.leagueTeams.get(2);
-    }
-
-    public void groupList(){
-        int i = 0;
-        for (T t: leagueTeams){
-            i++;
-            System.out.println(i+ " " + t.getName());
-        }
-    }
-
-
-    public void leagueTable(){
-
-        System.out.println("-----------------------------------------------------------------------");
-        System.out.println(
-                "Group " + this.getName() + " table: \t\t\t" + "pts"+ "\t\t" + "games"+ "\t" + "won"+ "\t  " + "tied" + "\t " + "lost" +
-                "\t" + "goals +/-");
-
-        Collections.sort(leagueTeams);
-        int i = 0;
-        for (T t: leagueTeams){
-            i++;
-            System.out.println( i +". " + " " + t.getName() + "\t\t\t" + t.gainedPoints() +
-                    "\t  |  " +t.played+ "\t\t " +t.won+ "\t\t" +t.tied+ "\t  " +t.lost +
-                    "\t\t" + t.goalDifference());
-        }
-        System.out.println("-----------------------------------------------------------------------");
+    public Team getThird() {
+        return this.groupTeams.get(2);
     }
 
     public void matchResult(T team1, T team2, int team1Score, int team2Score) {
         this.matchCount++;
 
-        if (matchCount<=6) {
-            int position = leagueTeams.indexOf(team1);
-            leagueTeams.get(position).matchResult(team2, team1Score, team2Score);
+        if (matchCount <= 6) {
+            int position = groupTeams.indexOf(team1);
+            groupTeams.get(position).matchResult(team2, team1Score, team2Score);
         } else {
-            System.out.println("Invalid, all matches in group " + this.getName()+ " played");
+            System.out.println("Invalid, all matches in group " + this.getName() + " played");
         }
+    }
+
+    public void leagueTable() {
+
+        System.out.println("-----------------------------------------------------------------------");
+        System.out.println("Group " + this.name + " table: \t\t\t" +
+                "pts" + "\t\t" + "games" + "\t" + "won" + "\t  " + "tied" + "\t " + "lost" + "\t" + "goals +/-");
+
+        Collections.sort(groupTeams);
+        int i = 0;
+        for (T t : groupTeams) {
+            i++;
+            System.out.println(i + ". " + " " + t.getName() + "\t\t\t" + t.gainedPoints() +
+                    "\t  |  " + t.played + "\t\t " + t.won + "\t\t" + t.tied + "\t  " + t.lost +
+                    "\t\t" + t.goalDifference());
+        }
+        System.out.println("-----------------------------------------------------------------------");
     }
 }
